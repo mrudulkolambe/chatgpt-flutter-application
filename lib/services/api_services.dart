@@ -9,9 +9,7 @@ import 'package:http/http.dart' as http;
 class APIService {
   static Future<List<Models>> getModels() async {
     try {
-      var response = await http.get(Uri.parse('$baseURL/models'), headers: {
-        'Authorization':
-            "Bearer $APIKEY"
+      var response = await http.get(Uri.parse('https://openai-backend.vercel.app/models'), headers: {
       });
 
       Map jsonResponse = jsonDecode(response.body);
