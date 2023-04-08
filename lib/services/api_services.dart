@@ -11,7 +11,7 @@ class APIService {
     try {
       var response = await http.get(Uri.parse('$baseURL/models'), headers: {
         'Authorization':
-            "Bearer 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"
+            "Bearer $APIKEY"
       });
 
       Map jsonResponse = jsonDecode(response.body);
@@ -37,8 +37,6 @@ class APIService {
         Uri.parse('https://openai-backend.vercel.app/app-chatgpt'),
         headers: {
           'Content-Type': 'application/json',
-          'Authorization':
-              "Bearer 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"
         },
         body: jsonEncode(
           {"model": modelId, "prompt": msg, "max_tokens": 2000},
