@@ -17,6 +17,7 @@ class ModelsProvider with ChangeNotifier {
   List<Models> modelsList = [];
 
   List<Models> get getModelsList {
+    print(modelsList);
     return modelsList;
   }
 

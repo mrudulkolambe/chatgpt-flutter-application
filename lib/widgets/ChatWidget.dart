@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class ChatWidget extends StatefulWidget {
   const ChatWidget(
@@ -23,13 +24,15 @@ class ChatWidget extends StatefulWidget {
 }
 
 class _ChatWidgetState extends State<ChatWidget> {
-
+  FlutterTts flutterTts = FlutterTts();
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         GestureDetector(
-          onHorizontalDragStart: (details) {},
+          onDoubleTap: () async {
+            var result = await flutterTts.speak(widget.msg);
+          },
           child: Container(
             margin: widget.positionIndex == 0
                 ? EdgeInsets.only(bottom: 10, top: 10)

@@ -1,6 +1,7 @@
 import 'package:chatgpt_flutter_app/constants/constants.dart';
 import 'package:chatgpt_flutter_app/providers/models_provider.dart';
 import 'package:chatgpt_flutter_app/screens/ChatScreen.dart';
+import 'package:chatgpt_flutter_app/screens/LaunchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => ModelsProvider())],
       child: MaterialApp(
+        routes: {
+          '/launch':(context) => const LaunchScreen(),
+          '/chat':(context) => const ChatScreen()
+        },
+        initialRoute: '/launch',
         title: 'ChatGPT',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -24,7 +30,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Fredoka',
             scaffoldBackgroundColor: darkColor,
             appBarTheme: AppBarTheme(color: cardColor)),
-        home: const ChatScreen(),
+        home: const LaunchScreen(),
       ),
     );
   }

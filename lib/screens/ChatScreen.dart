@@ -12,6 +12,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 import '../providers/models_provider.dart';
 import '../providers/text_provider.dart';
@@ -24,9 +25,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool _isTyping = false;
+  String _detail = "online";
+  bool isListening = false;
   double _scrollPosition = 1.0;
-
+  String searchText = '';
+  SpeechToText speechToText = SpeechToText();
   late TextEditingController textEditingController;
   late FocusNode focusNode;
   late ScrollController _listScrollController;
@@ -106,17 +109,11 @@ class _ChatScreenState extends State<ChatScreen> {
                             SizedBox(
                               height: 3,
                             ),
-                            _isTyping
-                                ? Text(
-                                    "Thinking...",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.blue[300]),
-                                  )
-                                : Text(
-                                    "online",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.blue[300]),
-                                  )
+                            Text(
+                              _detail,
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.blue[300]),
+                            )
                           ],
                         )
                       ],
@@ -169,8 +166,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           textAlignVertical: TextAlignVertical.center,
                           cursorWidth: 1,
                           focusNode: focusNode,
-                          enabled: _isTyping ? false : true,
-                          autofocus: true,
+                          enabled: _detail == 'Thinking...' ? false : true,
                           controller: textEditingController,
                           onSubmitted: ((value) async {
                             await sendMessagesFCT(
@@ -193,7 +189,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: cardColor,
                           borderRadius: BorderRadius.circular(25)),
                       child: Center(
-                        child: _isTyping
+                        child: _detail == 'Thinking...'
                             ? SpinKitFadingCircle(
                                 size: 20,
                                 color: botTextColor,
@@ -240,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       if (prompt.toString().isNotEmpty) {
         setState(() {
-          _isTyping = true;
+          _detail = 'Thinking...';
           chatList.add(ChatModel(msg: prompt, chatIndex: 0));
           textEditingController.clear();
           focusNode.unfocus();
@@ -255,7 +251,7 @@ class _ChatScreenState extends State<ChatScreen> {
       log("$e");
     } finally {
       setState(() {
-        _isTyping = false;
+        _detail = 'online';
       });
       scrollListToEnd();
     }
@@ -292,3 +288,43 @@ class _ChatScreenState extends State<ChatScreen> {
   //                       ))),
   //                 ),
   //               )
+
+  // 200 line
+
+
+  // textEditingController.text.isEmpty
+  //                               ? GestureDetector(
+  //                                   onTapUp: (details) {
+  //                                     _detail = 'listening...';
+  //                                     speechToText.stop();
+  //                                   },
+  //                                   onTapDown: (details) async {
+  //                                     _detail = 'online';
+  //                                     var available =
+  //                                         await speechToText.initialize();
+  //                                     if (available) {
+  //                                       speechToText.listen(
+  //                                         onResult: (result) {
+  //                                           textEditingController.text =
+  //                                               result.recognizedWords;
+  //                                         },
+  //                                       );
+  //                                       setState(() {});
+  //                                     }
+  //                                   },
+  //                                   child: IconButton(
+  //                                     iconSize: 22,
+  //                                     style: IconButton.styleFrom(
+  //                                         backgroundColor: isListening
+  //                                             ? Color.fromRGBO(72, 165, 195, 1)
+  //                                             : cardColor,
+  //                                         splashFactory:
+  //                                             NoSplash.splashFactory),
+  //                                     onPressed: () {},
+  //                                     icon: Icon(
+  //                                       Icons.mic_rounded,
+  //                                       color: botTextColor,
+  //                                     ),
+  //                                   ),
+  //                                 )
+  //                               :
